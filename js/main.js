@@ -111,7 +111,7 @@ function crearCheckout() {
         let div = document.createElement('div');
         div.classList.add("col-lg-12", "col-md-12", "col-sm-12", "text-center");
         div.innerHTML = `
-        <div id="tarjetasHab" class="card">
+        <div id="tarjetasHab" class="card estiloCheckout">
             <img src="${elementos.foto}" alt=""/>
                 <div class="card-body">
                     <h2>${elementos.nombre}</h2>

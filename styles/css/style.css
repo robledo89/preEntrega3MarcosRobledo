@@ -384,7 +384,11 @@ h4 {
   background-color: none;
 }
 
-/* ////////////////////////////// PARA ENTREGA JS /////////////////////////////// */
+/* .estiloCheckout{
+  image-resolution: 10px;
+} */
+
+/* ////////////////////////////// /////////// /////////////////////////////// */
 
 /* ---- PARTIAL SLIDER ---- */
 #carouselHotel .controlesSlider:hover {
