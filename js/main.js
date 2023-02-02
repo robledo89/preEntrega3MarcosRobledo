@@ -4,9 +4,9 @@ const visualizadorHabArray = [];
 ///////////////// CARRITO Y CHEQUEO NULL /////////////////////////
 let carritoArray = [];
 
-if (localStorage.getItem("carritoArray") === null){
+if (localStorage.getItem("carritoArray") === null) {
 }
-else{
+else {
     carritoArray = JSON.parse(localStorage.getItem("carritoArray"));
 }
 
@@ -23,7 +23,9 @@ const seleccionHabitacion = document.querySelectorAll(".botonHab");
 const tituloParaHabitaciones = document.querySelector("#tituloHab");
 let botonSeleccionado = document.querySelectorAll(".claseBotonSeleccionado");
 const visualizadorCarrito = document.querySelector(".visualizadorCarrito");
-const textoVacio = document.querySelector(".textoReservaVacia");
+
+const textoReservaVacia = document.querySelector(".textoReservaVacia");
+const textoContenidoCarrito = document.querySelector(".textoContenidoCarrito");
 
 const reservas = document.querySelector(".reservas");
 const checkout = document.querySelector(".checkout");
@@ -52,9 +54,9 @@ function cargaVisualizador(tipoHabSeleccionada) {
         </div>
         `;
         visualizadorHabitaciones.append(div);
-        
+
     })
-    funcionHabSeleccionar(); 
+    funcionHabSeleccionar();
 }
 
 ////////////// MOSTRAR TIPO HABITACIONES SEGUN ELECCION //////////////
@@ -70,7 +72,7 @@ seleccionHabitacion.forEach(botonTipoHab => {
                 tituloParaHabitaciones.innerText = "Habitaciones del Lago";
                 const filtroTipoHab = visualizadorHabArray.filter(habitacion => habitacion.tipoHabitacion === e.currentTarget.id)
                 cargaVisualizador(filtroTipoHab);
-            }else if (e.currentTarget.id === "Jardin"){
+            } else if (e.currentTarget.id === "Jardin") {
                 tituloParaHabitaciones.innerText = "Habitaciones del Jardin";
                 const filtroTipoHab = visualizadorHabArray.filter(habitacion => habitacion.tipoHabitacion === e.currentTarget.id)
                 cargaVisualizador(filtroTipoHab);
@@ -83,7 +85,7 @@ seleccionHabitacion.forEach(botonTipoHab => {
 });
 
 ///////////////// FUNCION DE BOTON HABITACION SELECCIONADA (sumar al carrito)
-function funcionHabSeleccionar(){
+function funcionHabSeleccionar() {
     botonSeleccionado = document.querySelectorAll(".claseBotonSeleccionado");
     botonSeleccionado.forEach(boton => {
         boton.addEventListener("click", sumarAlCarrito);
@@ -92,31 +94,17 @@ function funcionHabSeleccionar(){
 
 ///////////////// FUNCION PARA SUMAR ITEMS AL CARRITO
 
-//const pe = document.querySelectorAll(".claseBotonSeleccionado");
-function sumarAlCarrito(e){
+function sumarAlCarrito(e) {
     const idHab = e.currentTarget.id;
     const habSeleccionada = visualizadorHabArray.find(habitacion => habitacion.id == idHab)
+    carritoArray.push(habSeleccionada);
 
-        //if(carritoArray.some(habitacion => habitacion.id == idHab)){
-            //alert("Ya tiene reserva de habitación")
-            //e.currentTarget.classList.add("claseBotonSeleccionadoDesabilitado");
-            //const prueba = document.getElementsByClassName("claseBotonSeleccionado")
-            //console.log(prueba)
-            //prueba.classList.toggle("claseBotonSeleccionadoDesabilitado");
-            
-            //pe.classList.add("claseBotonSeleccionadoDesabilitado");
-        //}else{
-            carritoArray.push(habSeleccionada);
-        //}
-            //crearCheckout();         
-            localStorage.setItem("carritoArray", JSON.stringify(carritoArray));
-            //console.log() 
-            console.log("OK en array carrito? Enviado a check", carritoArray);
-            //crearCheckout2();        
+    localStorage.setItem("carritoArray", JSON.stringify(carritoArray));
+    console.log("OK en array carrito? Enviado a check", carritoArray);
 }
 
 ////////////// CARGAR ITEMS AL CARRITO
-function crearCheckout () {
+function crearCheckout() {
     visualizadorCarrito.innerHTML = '';
     carritoArray.forEach(elementos => {
 
@@ -135,32 +123,23 @@ function crearCheckout () {
                 </div>
         </div>
         `
-        ;
-        visualizadorCarrito.append(div); 
-        console.log("Post creacion?",visualizadorCarrito);
-        console.log("div",div);   
+            ;
+        visualizadorCarrito.append(div);
+        console.log("Post creacion?", visualizadorCarrito);
+        console.log("div", div);
     });
 };
 
 ///////////// CONSULTA PARA APLICAR FUNCIONES ////////////
-if (checkout){
-    if (localStorage.getItem("carritoArray") !== null){
-        textoVacio.innerHTML = '';
-    }        
+if (checkout) {
+    if (localStorage.getItem("carritoArray") !== null) {
+        textoReservaVacia.remove();
+    } else {
+        textoContenidoCarrito.remove();
+    }
     crearCheckout();
 }
 
-if (reservas){
+if (reservas) {
     cargaVisualizador(visualizadorHabArray);
 }
-
-
-
-
-
-
-
-
-
- 
-
