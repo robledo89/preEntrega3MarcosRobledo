@@ -1,19 +1,16 @@
-///////////////// ARRAY DE CARGA DE HABITACIONES /////////////////
-const visualizadorHabArray = [];
-
-///////////////// CARRITO Y CHEQUEO NULL /////////////////////////
+///////////////// CARRITO/VISUALIZADOR HABITACIONES Y CHEQUEO NULL /////////////////////////
 let carritoArray = [];
+let visualizadorHabArray = [];
 
-if (localStorage.getItem("carritoArray") === null) {
-}
-else {
-    carritoArray = JSON.parse(localStorage.getItem("carritoArray"));
-}
+fetch("../js/items.json")
+.then(response => response.json())
+.then(data => {
+    visualizadorHabArray = data;
+    cargaVisualizador(visualizadorHabArray);
+})
 
-visualizadorHabArray.push(tipoReserva1);
-visualizadorHabArray.push(tipoReserva2);
-visualizadorHabArray.push(tipoReserva3);
-visualizadorHabArray.push(tipoReserva4);
+//////////////////////// OPERADOR AVANZADO //////////////////////////
+carritoArray = carritoArray = JSON.parse(localStorage.getItem("carritoArray")) || [];
 
 /////////////////////////////////////////////////////////////////////
 //////////////////////// SELECTORES QUERYS //////////////////////////
@@ -30,6 +27,8 @@ const textoContenidoCarrito = document.querySelector(".textoContenidoCarrito");
 const reservas = document.querySelector(".reservas");
 const checkout = document.querySelector(".checkout");
 
+const vaciar = document.querySelector("#vaciar");
+
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 
@@ -37,7 +36,6 @@ const checkout = document.querySelector(".checkout");
 function cargaVisualizador(tipoHabSeleccionada) {
     visualizadorHabitaciones.innerHTML = '';
     tipoHabSeleccionada.forEach(elementos => {
-
         const div = document.createElement("div");
         div.classList.add("col-lg-6", "col-md-6", "col-sm-12", "text-center");
         div.innerHTML = `
@@ -54,7 +52,6 @@ function cargaVisualizador(tipoHabSeleccionada) {
         </div>
         `;
         visualizadorHabitaciones.append(div);
-
     })
     funcionHabSeleccionar();
 }
@@ -84,7 +81,7 @@ seleccionHabitacion.forEach(botonTipoHab => {
     })
 });
 
-///////////////// FUNCION DE BOTON HABITACION SELECCIONADA (sumar al carrito)
+///////////////// FUNCION DE BOTON HABITACION SELECCIONADA (sumar al carrito) //////////////
 function funcionHabSeleccionar() {
     botonSeleccionado = document.querySelectorAll(".claseBotonSeleccionado");
     botonSeleccionado.forEach(boton => {
@@ -92,45 +89,136 @@ function funcionHabSeleccionar() {
     })
 }
 
-///////////////// FUNCION PARA SUMAR ITEMS AL CARRITO
-
+///////////////// FUNCION PARA SUMAR ITEMS AL CARRITO //////////////////
 function sumarAlCarrito(e) {
+    Toastify({
+        text: "Agregado al carrito",
+        duration: 2500,
+        destination: "https://github.com/apvarun/toastify-js",
+        newWindow: true,
+        close: false,
+        gravity: "down", 
+        position: "right", 
+        stopOnFocus: true, 
+        style: {
+        borderRadius: "0.8rem",
+          background: "linear-gradient(to top, #91e8c1, #69e1ab)",
+        },
+        onClick: function(){}
+    }).showToast();
     const idHab = e.currentTarget.id;
     const habSeleccionada = visualizadorHabArray.find(habitacion => habitacion.id == idHab)
     carritoArray.push(habSeleccionada);
 
     localStorage.setItem("carritoArray", JSON.stringify(carritoArray));
-    console.log("OK en array carrito? Enviado a check", carritoArray);
 }
 
-////////////// CARGAR ITEMS AL CARRITO
+///////////////// CARGAR ITEMS AL CARRITO //////////////////
 function crearCheckout() {
     visualizadorCarrito.innerHTML = '';
     carritoArray.forEach(elementos => {
-
         let div = document.createElement('div');
-        div.classList.add("col-lg-12", "col-md-12", "col-sm-12", "text-center");
-        div.innerHTML = `
-        <div id="tarjetasHab" class="card estiloCheckout">
-            <img src="${elementos.foto}" alt=""/>
-                <div class="card-body">
-                    <h2>${elementos.nombre}</h2>
-                    <p>Cama: ${elementos.cama}</p>
-                    <p>Capacidad (personas): ${elementos.capacidad}</p>
-                    <p>Size: ${elementos.metraje} m²</p>
-                    <p>Precio: $ ${elementos.precio}</p>
-                    <button id= "eliminar" class="col-12 mx-auto buttonForm botonHab">Eliminar</button>
-                </div>
-        </div>
-        `
+        div.classList.add("rowItemIndividual");
+        div.innerHTML =`
+                            <div class="cadaItem">
+                                <img src="${elementos.foto}" alt=""/>                        
+                            </div>
+                            <div class="cadaItem">
+                                <small>Habitación</small>
+                                <strong>${elementos.nombre}</strong>
+                            </div>
+                            <div class="cadaItem">
+                                <small>Cama</small>
+                                <p>${elementos.cama}</p>
+                            </div>
+                            <div class="cadaItem">
+                                <small>Personas</small>
+                                <p>${elementos.capacidad}</p>
+                            </div>
+                            <div class="cadaItem">
+                                <small>Tamaño</small>
+                                <p>${elementos.metraje} m²</p>
+                            </div>
+                            <div class="cadaItem">
+                                <small>Precio</small>
+                                <p>U$S ${elementos.precio}</p>
+                            </div>
+                            <div class="cadaItem">
+                                <button id="${elementos.id}" class="col-12 mx-auto buttonForm botonHab eliminarItemCarrito">Eliminar</button>
+                            </div>
+            `
             ;
         visualizadorCarrito.append(div);
-        console.log("Post creacion?", visualizadorCarrito);
-        console.log("div", div);
+        const quitarItem = document.querySelectorAll(".eliminarItemCarrito");
+        quitarItem.forEach((button) => {
+          button.addEventListener("click", eliminar);
+        });
     });
 };
 
+///////////// ELIMINAR ITEM INDIVIDUAL DE CARRITO ////////////
+function eliminar (e) {   
+    
+        const itemEliminar = e.target.closest(".eliminarItemCarrito").getAttribute("id");
+        carritoArray = carritoArray.filter((impresion) => impresion.id != itemEliminar);
+        const carro = JSON.stringify(carritoArray);
+        localStorage.setItem("carritoArray", carro);
+        Toastify({
+            text: "Eliminado",
+            duration: 2500,
+            destination: "https://github.com/apvarun/toastify-js",
+            newWindow: true,
+            close: false,
+            gravity: "down", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+            borderRadius: "0.8rem",
+              background: "linear-gradient(to top, #91e8c1, #69e1ab)",
+            },
+            onClick: function(){} // Callback after click
+        }).showToast();
+        crearCheckout();
+}
+
+///////////// VACIAR TOTAL CARRITO ////////////
+vaciar.addEventListener("click", avisoVaciado)
+
+function vaciarCarrito() {
+    carritoArray.length = 0;
+    localStorage.setItem("carritoArray", JSON.stringify(carritoArray));
+    crearCheckout();
+}
+
+///////////// SWEET ALERTS ////////////
+
+// AVISO CUANDO VACÍA EL CARRITO Y LLAMA A FUNCION DE VACIAR
+function avisoVaciado (){
+  Swal.fire({
+    title: '¿Desea eliminar su reserva?',
+    text: 'ATENCIÓN: El vaciado de su carrito es permanente',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#06563b',
+    cancelButtonColor: '#01301b',
+    cancelButtonText: 'Cancelar',
+    confirmButtonText: 'Eliminar'    
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: 'Eliminado',
+        text: 'Su carrito ha sido vaciado por completo',
+        icon: 'success',
+        confirmButtonColor: '#06563b',
+        confirmButtonText: 'Okey' 
+        })
+      vaciarCarrito();
+    }
+  })
+}
+
 ///////////// CONSULTA PARA APLICAR FUNCIONES ////////////
+// Para checkout
 if (checkout) {
     if (localStorage.getItem("carritoArray") !== null) {
         textoReservaVacia.remove();
@@ -139,7 +227,22 @@ if (checkout) {
     }
     crearCheckout();
 }
-
+// Para Reservas
 if (reservas) {
     cargaVisualizador(visualizadorHabArray);
 }
+
+// if (localStorage.getItem("carritoArray") === null) {
+    // }
+    // else {
+    //     carritoArray = JSON.parse(localStorage.getItem("carritoArray"));
+    // }
+    
+    // if (localStorage.getItem("carritoArray") === null) {
+    // }
+    // else {
+    //     carritoArray = JSON.parse(localStorage.getItem("carritoArray"));
+    // }
+
+
+

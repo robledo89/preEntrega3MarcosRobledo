@@ -21,6 +21,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Merienda&display=swap" rel="stylesheet">
     <!-- Mi CSS -->
     <link rel="stylesheet" href="../styles/css/style.css" />
+    <script src="sweetalert2.all.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Animate -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <!-- toastify -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 
 <body>
@@ -75,23 +81,23 @@
         <h1>Check-out</h1>
         <div class="row contenedorForm checkout">
             <h3>Detalles Reserva</h3>
-            <div class="col-lg-4 col-md-4 col-sm-12" action="">
-                <div class="row mx-auto">
+            <div class="col-lg-2 col-md-2 col-sm-12" action="">
+                <div>
                     <button id="volverMenuReservas" class="col-12 mx-auto buttonForm botonHab"
                         onclick="location.href='../pages/reservas.html'">Volver a Menu Reserva</button>
-                    <button id="checkOutFinal" class="col-12 mx-auto buttonForm botonHab btnHabActivo">Finalizar
-                        Check-Out</button>
+                    <button id="vaciar" class="col-12 mx-auto buttonForm botonHab btnHabActivo">Vaciar Carrito</button>
+                    <button id="checkOutFinal" class="col-12 mx-auto buttonForm botonHab btnHabActivo">Finalizar Check-Out</button>
                 </div>
             </div>
             <!-- CheckOut -->
-            <div class="col-lg-8 col-md-7 col-sm-12 opacidadHab">
+            <div class="col-lg-10 col-md-10 col-sm-12 opacidadHab">
                 <h4 class="textoContenidoCarrito">Contenido carrito</h4>
-                <div id="checkOut" class="row">
-                    <h4 class="textoReservaVacia">Usted no cuenta con reservas activas</h4>
-                    <div class="visualizadorCarrito">
-                    </div>
-                    <!-- CARGA DE HABITACIONES MEDIANTE JS -->
-                </div>
+                <h4 class="textoReservaVacia">Usted no cuenta con reservas activas</h4>
+                <!-- SE INSERTAN ITEMS DEL CARRITO -->
+                <div class="visualizadorCarrito">
+                <!-- CARGA MEDIANTE JS -->
+                </div>               
+                <!-- </div> -->
             </div>
         </div>
         <!-- FOOTER -->
@@ -121,6 +127,8 @@
     </div>
 
     <!-- JS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>
